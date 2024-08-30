@@ -1,8 +1,11 @@
 export default function WatchedList({ watched, onRemoveWatched }) {
+  if (!watched) {
+    return <></>;
+  }
   return (
     <>
       <ul className="list">
-        {watched.map((movie) => (
+        {watched?.map((movie) => (
           <li key={movie.imdbID}>
             <img src={movie.poster} alt={`${movie.title} poster`} />
             <h3>{movie.title}</h3>
