@@ -6,10 +6,12 @@ import MovieDetails from "./MovieDetails";
 import WatchedSummary from "./WatchedSummary";
 import WatchedList from "./WatchedList";
 import Loader from "./Loader";
-import { useMovies } from "./useMovies";
 
-const KEY = "f84fc31d";
+const APIkey = "2ac33b78";
 export default function App() {
+  const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // add a loading state
+  const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   // const [watched, setWatched] = useState([]);
@@ -17,8 +19,6 @@ export default function App() {
     const stroredValue = localStorage.getItem("watched");
     return JSON.parse(stroredValue);
   });
-
-  const { movies, isLoading, error } = useMovies(query);
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
