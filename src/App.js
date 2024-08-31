@@ -6,19 +6,20 @@ import MovieDetails from "./MovieDetails";
 import WatchedSummary from "./WatchedSummary";
 import WatchedList from "./WatchedList";
 import Loader from "./Loader";
+import { useMovies } from "./useMovies";
 
-const APIkey = "2ac33b78";
+const KEY = "f84fc31d";
 export default function App() {
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // add a loading state
-  const [error, setError] = useState("");
   const [query, setQuery] = useState("");
+  console.log("QUERY========", query);
   const [selectedId, setSelectedId] = useState(null);
   // const [watched, setWatched] = useState([]);
   const [watched, setWatched] = useState(function () {
     const stroredValue = localStorage.getItem("watched");
     return JSON.parse(stroredValue);
   });
+
+  const { movies, isLoading, error } = useMovies(query);
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
@@ -115,6 +116,7 @@ function Search({ query, setQuery }) {
   useEffect(function () {
     inputEl.current.focus();
   }, []);
+
   return (
     <input
       className="search"
