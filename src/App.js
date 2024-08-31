@@ -11,13 +11,23 @@ import { useMovies } from "./useMovies";
 const KEY = "f84fc31d";
 export default function App() {
   const [query, setQuery] = useState("");
-  console.log("QUERY========", query);
   const [selectedId, setSelectedId] = useState(null);
   // const [watched, setWatched] = useState([]);
-  const [watched, setWatched] = useState(function () {
-    const stroredValue = localStorage.getItem("watched");
-    return JSON.parse(stroredValue);
-  });
+  const [watched, setWatched] = useState([]);
+
+  useEffect(() => {
+    const storedValue = localStorage.getItem("watched");
+    const value = JSON.parse(storedValue);
+    if (value) {
+      setWatched(value);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (watched?.length > 0) {
+      localStorage.setItem("watched", JSON.stringify(watched));
+    }
+  }, [watched]);
 
   const { movies, isLoading, error } = useMovies(query);
 
@@ -36,13 +46,6 @@ export default function App() {
       watched.filter((watchedmovie) => watchedmovie.imdbID !== id)
     );
   }
-
-  useEffect(
-    function () {
-      localStorage.setItem("watched", JSON.stringify(watched));
-    },
-    [watched]
-  );
 
   return (
     <>

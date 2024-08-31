@@ -14,12 +14,9 @@ export default function MovieDetails({
 
   const countRef = useRef(0);
 
-  useEffect(
-    function () {
-      if (userRating) countRef.current = countRef.current + 1;
-    },
-    [userRating]
-  );
+  useEffect(() => {
+    if (userRating) countRef.current = countRef.current + 1;
+  }, [userRating]);
 
   const {
     Title: title,
@@ -64,40 +61,34 @@ export default function MovieDetails({
     [selectedId]
   );
 
-  useEffect(
-    function () {
-      if (!title) return;
-      document.title = `Movie | ${title}`;
+  useEffect(() => {
+    if (!title) return;
+    document.title = `Movie | ${title}`;
 
-      return function () {
-        document.title = "usePopcorn";
-      };
-    },
-    [title]
-  );
+    return () => {
+      document.title = "usePopcorn";
+    };
+  }, [title]);
 
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === "Escape") {
-          onCloseMovie();
-        }
+  useEffect(() => {
+    function callback(e) {
+      if (e.code === "Escape") {
+        onCloseMovie();
       }
-      document.addEventListener("keydown", callback);
-      return function () {
-        document.removeEventListener("keydown", callback);
-      };
-    },
+    }
+    document.addEventListener("keydown", callback);
+    return () => {
+      document.removeEventListener("keydown", callback);
+    };
+  }, [onCloseMovie]);
 
-    [onCloseMovie]
+  const isWatched = watched?.filter(
+    (watchedMovie) => selectedId === watchedMovie.imdbID
   );
-
-  const isWatched = watched.filter(
-    (watchedmovie) => selectedId === watchedmovie.imdbID
-  );
-  const watchedUserRating = watched.find(
+  const watchedUserRating = watched?.find(
     (movie) => movie.imdbID === selectedId
   )?.userRating;
+
   return (
     <div className="details">
       {isLoading ? (
@@ -122,7 +113,7 @@ export default function MovieDetails({
             </div>
           </header>
           <div className="rating">
-            {isWatched.length > 0 ? (
+            {isWatched?.length > 0 ? (
               <div>
                 Movie already in Watched list.{" "}
                 <p>You rated this movie {watchedUserRating} ⭐</p>
